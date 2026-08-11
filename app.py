@@ -1,6 +1,6 @@
 import streamlit as st
 from pypdf import PdfReader
-from google import genai
+from google-generativeai import genai
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
