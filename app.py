@@ -1,8 +1,10 @@
 import streamlit as st
 from pypdf import PdfReader
-from google-generativeai import genai
+from google.generativeai import genai
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+api_key = st.secrets["GOOGLE_API_KEY"]
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel("models/gemini-3.5-flash")
 
 st.title("📄 AI Document Assistant")
 
@@ -19,7 +21,7 @@ if uploaded_file is not None:
     with col1:
         if st.button("Summarize Document"):
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model.generate_content(uploaded_file),
                 contents=f"Summarize the following document accurately:\n\n{pdf_text}"
             )
             st.write(response.text)
@@ -27,7 +29,7 @@ if uploaded_file is not None:
     with col2:
         if st.button("Generate Interview Questions"):
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model.generate_content(uploaded_file),
                 contents=f"Generate 5 interview questions based on this document:\n\n{pdf_text}"
             )
             st.write(response.text)
@@ -40,7 +42,7 @@ if uploaded_file is not None:
             # Combine Document Content + User Question
             prompt = f"Answer the user's question using ONLY the context provided below.\n\nContext:\n{pdf_text}\n\nQuestion: {user_question}"
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model.generate_content(uploaded_file),
                 contents=prompt
             )
             st.subheader("Answer:")
