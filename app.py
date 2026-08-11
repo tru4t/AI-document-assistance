@@ -1,6 +1,6 @@
 import streamlit as st
 from pypdf import PdfReader
-from google.generativeai import genai
+import google.generativeai as genai
 
 api_key = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=api_key)
